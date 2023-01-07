@@ -9,17 +9,8 @@ extends KinematicBody2D
 #func _process(delta):
 #	pass
 
-var velocity = Vector2.ZERO
+const PlayerVelocityCalculator = preload("PlayerVelocityCalculator.gd")
+onready var player_velocity_calculator = PlayerVelocityCalculator.new()
 
 func _physics_process(delta):
-	var input_vector = Vector2.ZERO
-
-	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-
-	if(input_vector != Vector2.ZERO):
-		velocity = input_vector
-	else:
-		velocity = Vector2.ZERO
-
-	move_and_collide(velocity)
+	move_and_collide(player_velocity_calculator.calculate(delta))
