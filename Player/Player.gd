@@ -9,14 +9,23 @@ extends KinematicBody2D
 #func _process(delta):
 #  pass
 
-const PlayerVelocityCalculator = preload("PlayerVelocityCalculator.gd")
-onready var player_velocity_calculator = PlayerVelocityCalculator.new()
-
 var velocity = Vector2.ZERO
 
-onready var animationPlayer = $AnimationPlayer
+const PlayerMovementCalculator = preload("PlayerMovementCalculator.gd")
+const PlayerAnimationProcessor = preload("PlayerAnimationProcessor.gd")
+
+onready var animation_tree: AnimationTree = $AnimationTree
+
+onready var movement_calculator = PlayerMovementCalculator.new()
+onready var animation_processor = PlayerAnimationProcessor.new(animation_tree)
 
 func _physics_process(delta):
-  velocity = player_velocity_calculator.calculate(animationPlayer, velocity, delta)
+  var movement_result = movement_calculator.calculate(velocity, delta)
 
-  velocity = move_and_slide(velocity)
+  var input_vector = movement_result[0]
+  var is_moving = movement_result[1]
+  var new_velocity = movement_result[2]
+
+  animation_processor.process(input_vector, is_moving)
+
+  velocity = move_and_slide(new_velocity)
