@@ -5,7 +5,7 @@ const ACCELERATION = 800
 const MAX_SPEED = 80
 const FRICTION = 800
 
-func calculate(prev_velocity, delta):
+func calculate(animationPlayer, prev_velocity, delta):
   var input_vector = Vector2.ZERO
 
   set_horizontal_velocity_override()
@@ -15,8 +15,14 @@ func calculate(prev_velocity, delta):
   input_vector.y = calculate_vertical_velocity()
 
   if(input_vector != Vector2.ZERO):
+    if input_vector.x > 0:
+      animationPlayer.play("RunRight")
+    else:
+      animationPlayer.play("RunLeft")
+
     return prev_velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * delta)
   else:
+    animationPlayer.play("IdleRight")
     return prev_velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 
 func set_horizontal_velocity_override():

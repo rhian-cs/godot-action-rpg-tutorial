@@ -14,7 +14,9 @@ onready var player_velocity_calculator = PlayerVelocityCalculator.new()
 
 var velocity = Vector2.ZERO
 
+onready var animationPlayer = $AnimationPlayer
+
 func _physics_process(delta):
-  velocity = player_velocity_calculator.calculate(velocity, delta)
+  velocity = player_velocity_calculator.calculate(animationPlayer, velocity, delta)
 
   velocity = move_and_slide(velocity)
