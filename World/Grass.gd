@@ -1,14 +1,6 @@
 extends Node2D
 
-func _process(_delta: float):
-  if Input.is_action_just_pressed("attack"):
-    trigger_destruction()
-
-func trigger_destruction():
-  load_effect()
-  queue_free()
-
-func load_effect():
+func create_effect():
   var GrassEffect = load("res://Effects/GrassEffect.tscn")
   var grass_effect = GrassEffect.instance()
 
@@ -16,3 +8,7 @@ func load_effect():
 
   world.add_child(grass_effect)
   grass_effect.global_position = global_position
+
+func _on_Hurtbox_area_entered(area):
+  create_effect()
+  queue_free()
