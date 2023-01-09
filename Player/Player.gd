@@ -17,7 +17,7 @@ enum {
 var velocity = Vector2.ZERO
 var state = MOVE
 
-func _physics_process(delta: float):
+func _process(delta: float):
   match(state):
     MOVE:
       move_state(delta)
