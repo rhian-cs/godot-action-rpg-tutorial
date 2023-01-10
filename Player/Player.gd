@@ -4,6 +4,7 @@ const PlayerPhysicsCalculator = preload("PlayerPhysicsCalculator.gd")
 const PlayerAnimationProcessor = preload("PlayerAnimationProcessor.gd")
 
 onready var animation_tree: AnimationTree = $AnimationTree
+onready var sword_hitbox: Area2D = $HitboxPivot/SwordHitbox
 
 onready var physics_calculator = PlayerPhysicsCalculator.new()
 onready var animation_processor = PlayerAnimationProcessor.new(animation_tree)
@@ -17,6 +18,12 @@ enum {
 var velocity: Vector2 = Vector2.ZERO
 var roll_vector: Vector2 = Vector2.LEFT
 var state: int = MOVE
+
+func _ready():
+  update_sword_hitbox()
+
+func update_sword_hitbox():
+  sword_hitbox.knockback_vector = roll_vector
 
 func _physics_process(delta: float):
   match(state):
@@ -34,6 +41,8 @@ func move_state(delta: float):
   var is_moving = physics_result[1]
   var input_vector = physics_result[2]
   roll_vector = physics_result[3]
+
+  update_sword_hitbox()
 
   animation_processor.process_movement(input_vector, is_moving)
 
