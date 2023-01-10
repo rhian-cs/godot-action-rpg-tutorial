@@ -13,6 +13,7 @@ func process_movement(input_vector, is_moving):
     animation_tree.set("parameters/Idle/blend_position", input_vector)
     animation_tree.set("parameters/Run/blend_position", input_vector)
     animation_tree.set("parameters/Attack/blend_position", input_vector)
+    animation_tree.set("parameters/Roll/blend_position", input_vector)
 
     animation_state.travel("Run")
   else:
@@ -20,3 +21,6 @@ func process_movement(input_vector, is_moving):
 
 func process_attack():
   animation_state.travel("Attack")
+
+func process_roll():
+  animation_state.travel("Roll")
