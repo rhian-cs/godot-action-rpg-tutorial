@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+const EnemyDeathEffect = preload("res://Effects/EnemyDeathEffect.tscn")
+
 const FRICTION  = 200
 const KNOCKBACK_FACTOR = 120
 
@@ -17,4 +19,11 @@ func _on_Hurtbox_area_entered(area: Area2D):
   knockback = area.knockback_vector * KNOCKBACK_FACTOR
 
 func _on_Stats_no_health():
+  create_effect()
   queue_free()
+
+func create_effect():
+  var enemy_death_effect = EnemyDeathEffect.instance()
+
+  get_parent().add_child(enemy_death_effect)
+  enemy_death_effect.global_position = global_position
