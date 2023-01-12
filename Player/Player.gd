@@ -1,12 +1,17 @@
 extends KinematicBody2D
 
+export (float) var acceleration = 800
+export (float) var max_speed = 80
+export (float) var roll_speed = 120
+export (float) var friction = 800
+
 const PlayerPhysicsCalculator = preload("PlayerPhysicsCalculator.gd")
 const PlayerAnimationProcessor = preload("PlayerAnimationProcessor.gd")
 
 onready var animation_tree: AnimationTree = $AnimationTree
 onready var sword_hitbox: Area2D = $HitboxPivot/SwordHitbox
 
-onready var physics_calculator = PlayerPhysicsCalculator.new()
+onready var physics_calculator = PlayerPhysicsCalculator.new(acceleration, max_speed, roll_speed, friction)
 onready var animation_processor = PlayerAnimationProcessor.new(animation_tree)
 
 enum {

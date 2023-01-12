@@ -1,10 +1,16 @@
 var horizontal_velocity_override = 0
 var vertical_velocity_override = 0
 
-const ACCELERATION = 800
-const MAX_SPEED = 80
-const ROLL_SPEED = 120
-const FRICTION = 800
+var acceleration
+var max_speed
+var roll_speed
+var friction
+
+func _init(player_acceleration: float, player_max_speed: float, player_roll_speed: float, player_friction: float):
+  acceleration = player_acceleration
+  max_speed = player_max_speed
+  roll_speed = player_roll_speed
+  friction = player_friction
 
 func calculate_movement(prev_velocity: Vector2, roll_vector: Vector2, delta: float):
   set_horizontal_velocity_override()
@@ -22,7 +28,7 @@ func calculate_movement(prev_velocity: Vector2, roll_vector: Vector2, delta: flo
   return [new_velocity, is_moving, input_vector, roll_vector]
 
 func calculate_roll(roll_vector: Vector2, _delta: float):
-  return roll_vector * ROLL_SPEED
+  return roll_vector * roll_speed
 
 func set_horizontal_velocity_override():
   if(Input.is_action_just_pressed("ui_left")):
@@ -64,6 +70,6 @@ func calculate_vertical_velocity():
 
 func calculate_new_velocity(input_vector: Vector2, is_moving: bool, prev_velocity: Vector2, delta: float):
   if(is_moving):
-    return prev_velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * delta)
+    return prev_velocity.move_toward(input_vector * max_speed, acceleration * delta)
   else:
-    return prev_velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+    return prev_velocity.move_toward(Vector2.ZERO, friction * delta)
