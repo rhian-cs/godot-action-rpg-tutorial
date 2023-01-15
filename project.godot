@@ -23,6 +23,10 @@ _global_script_class_icons={
 config/name="Action RPG - Heart Beast Tutorial"
 run/main_scene="res://Scenes/World.tscn"
 
+[autoload]
+
+PlayerStats="*res://Player/PlayerStats.tscn"
+
 [display]
 
 window/size/width=320

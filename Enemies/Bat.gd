@@ -11,6 +11,7 @@ export (float) var acceleration = 600.0
 onready var sprite = $AnimatedSprite
 onready var stats = $Stats
 onready var player_detection_zone = $PlayerDetectionZone
+onready var hurtbox = $Hurtbox
 
 enum {
   IDLE = 10,
@@ -79,6 +80,7 @@ func create_death_effect():
 
 func _on_Hurtbox_area_entered(area: Area2D):
   stats.health -= area.damage
+  hurtbox.create_hit_effect()
 
   knockback = area.knockback_vector * knockback_factor
 

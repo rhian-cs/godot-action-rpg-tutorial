@@ -10,9 +10,12 @@ const PlayerAnimationProcessor = preload("PlayerAnimationProcessor.gd")
 
 onready var animation_tree: AnimationTree = $AnimationTree
 onready var sword_hitbox: Area2D = $HitboxPivot/SwordHitbox
+onready var hurtbox: Area2D = $Hurtbox
 
 onready var physics_calculator = PlayerPhysicsCalculator.new(acceleration, max_speed, roll_speed, friction)
 onready var animation_processor = PlayerAnimationProcessor.new(animation_tree)
+
+const INVINCIBILITY_TIME = 0.5
 
 enum {
   MOVE = 10,
@@ -23,8 +26,10 @@ enum {
 var velocity: Vector2 = Vector2.ZERO
 var roll_vector: Vector2 = Vector2.DOWN
 var state: int = MOVE
+var stats = PlayerStats
 
 func _ready():
+  stats.connect("no_health", self, "queue_free")
   update_sword_hitbox()
 
 func update_sword_hitbox():
@@ -78,3 +83,8 @@ func on_attack_animation_finished():
 
 func on_roll_animation_finished():
   state = MOVE
+
+func _on_Hurtbox_area_entered(area: Area2D):
+  hurtbox.start_invincibility(INVINCIBILITY_TIME)
+  hurtbox.create_hit_effect()
+  stats.health -= 1
