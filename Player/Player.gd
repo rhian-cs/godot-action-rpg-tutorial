@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export (float) var acceleration = 800
 export (float) var max_speed = 80
-export (float) var roll_speed = 120
+export (float) var roll_speed = 140
 export (float) var friction = 800
 
 const PlayerPhysicsCalculator = preload("PlayerPhysicsCalculator.gd")
