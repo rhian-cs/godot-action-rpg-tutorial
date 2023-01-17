@@ -1,10 +1,11 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.png" type="Texture" id=2]
 [ext_resource path="res://OverlapAreas/Hitbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Player/SwordHitbox.gd" type="Script" id=4]
 [ext_resource path="res://OverlapAreas/Hurtbox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Shadows/MediumShadow.png" type="Texture" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.0
@@ -671,6 +672,11 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="ShadowSprite" type="Sprite" parent="."]
+position = Vector2( -0.51, 1 )
+scale = Vector2( 0.916, 1 )
+texture = ExtResource( 6 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -9 )
