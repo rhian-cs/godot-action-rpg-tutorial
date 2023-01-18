@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Enemies/Bat.png" type="Texture" id=1]
 [ext_resource path="res://Shadows/SmallShadow.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Enemies/PlayerDetectionZone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://OverlapAreas/Hitbox.tscn" type="PackedScene" id=7]
+[ext_resource path="res://OverlapAreas/SoftCollision.tscn" type="PackedScene" id=8]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -40,6 +41,9 @@ animations = [ {
 radius = 3.0
 height = 2.0
 
+[sub_resource type="CircleShape2D" id=11]
+radius = 4.0
+
 [sub_resource type="CircleShape2D" id=9]
 radius = 69.0072
 
@@ -61,7 +65,7 @@ __meta__ = {
 position = Vector2( 0, 3 )
 frames = SubResource( 6 )
 animation = "fly"
-frame = 4
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 __meta__ = {
@@ -76,6 +80,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, 3 )
 rotation = 1.5708
 shape = SubResource( 7 )
@@ -87,12 +92,21 @@ __meta__ = {
 [node name="Stats" parent="." instance=ExtResource( 5 )]
 max_health = 2
 
+[node name="SoftCollision" parent="." instance=ExtResource( 8 )]
+
+[node name="CollisionShape2D" parent="SoftCollision" index="0"]
+modulate = Color( 0.00784314, 1, 0, 1 )
+position = Vector2( 0, 3 )
+shape = SubResource( 11 )
+
 [node name="PlayerDetectionZone" parent="." instance=ExtResource( 6 )]
+visible = false
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="CollisionShape2D" parent="PlayerDetectionZone" index="0"]
+visible = false
 modulate = Color( 1, 0, 0, 1 )
 shape = SubResource( 9 )
 __meta__ = {
@@ -100,12 +114,14 @@ __meta__ = {
 }
 
 [node name="Hitbox" parent="." instance=ExtResource( 7 )]
+visible = false
 collision_mask = 4
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="CollisionShape2D" parent="Hitbox" index="0"]
+visible = false
 position = Vector2( 0, -11 )
 shape = SubResource( 10 )
 __meta__ = {
@@ -113,12 +129,14 @@ __meta__ = {
 }
 
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
+visible = false
 collision_layer = 8
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
+visible = false
 position = Vector2( 0, -9 )
 shape = SubResource( 8 )
 __meta__ = {
@@ -128,6 +146,7 @@ __meta__ = {
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 
+[editable path="SoftCollision"]
 [editable path="PlayerDetectionZone"]
 [editable path="Hitbox"]
 [editable path="Hurtbox"]

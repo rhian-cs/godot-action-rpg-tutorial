@@ -7,11 +7,13 @@ export (float) var knockback_factor = 200.0
 export (float) var movement_friction = 400.0
 export (float) var max_speed = 60.0
 export (float) var acceleration = 600.0
+export (float) var soft_collision_factor = 400.0
 
 onready var sprite = $AnimatedSprite
 onready var stats = $Stats
 onready var player_detection_zone = $PlayerDetectionZone
 onready var hurtbox = $Hurtbox
+onready var soft_collision = $SoftCollision
 
 enum {
   IDLE = 10,
@@ -26,7 +28,7 @@ var state = CHASE
 
 func _physics_process(delta):
   process_knockback(delta)
-  process_movement()
+  process_movement(delta)
 
   match state:
     IDLE:
@@ -41,7 +43,9 @@ func process_knockback(delta):
   knockback = knockback.move_toward(Vector2.ZERO, knockback_friction * delta)
   knockback = move_and_slide(knockback)
 
-func process_movement():
+func process_movement(delta):
+  if soft_collision.is_colliding():
+    velocity += soft_collision.get_push_vector() * delta * soft_collision_factor
   velocity = move_and_slide(velocity)
 
 func update_sprite_direction():
