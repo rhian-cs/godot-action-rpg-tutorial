@@ -65,7 +65,6 @@ __meta__ = {
 position = Vector2( 0, 3 )
 frames = SubResource( 6 )
 animation = "fly"
-frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 __meta__ = {
