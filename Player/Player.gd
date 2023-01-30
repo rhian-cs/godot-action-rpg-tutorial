@@ -29,6 +29,7 @@ var state: int = MOVE
 var stats = PlayerStats
 
 func _ready():
+  randomize()
   stats.connect("no_health", self, "queue_free")
   update_sword_hitbox()
 

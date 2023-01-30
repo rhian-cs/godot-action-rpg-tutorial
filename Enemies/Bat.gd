@@ -8,12 +8,14 @@ export (float) var movement_friction = 400.0
 export (float) var max_speed = 60.0
 export (float) var acceleration = 600.0
 export (float) var soft_collision_factor = 400.0
+export (float) var wander_target_range_limit = 4.0
 
 onready var sprite = $AnimatedSprite
 onready var stats = $Stats
 onready var player_detection_zone = $PlayerDetectionZone
 onready var hurtbox = $Hurtbox
 onready var soft_collision = $SoftCollision
+onready var wander_controller = $WanderController
 
 enum {
   IDLE = 10,
@@ -26,6 +28,9 @@ var knockback = Vector2.ZERO
 
 var state = CHASE
 
+func _ready():
+  pick_random_state()
+
 func _physics_process(delta):
   process_knockback(delta)
   process_movement(delta)
@@ -34,9 +39,11 @@ func _physics_process(delta):
     IDLE:
       idle_state(delta)
     WANDER:
-      pass
+      wander_state(delta)
     CHASE:
       chase_state(delta)
+
+  update_sprite_direction()
 
 func process_knockback(delta):
   # Decrease knockback and then apply it
@@ -56,29 +63,55 @@ func idle_state(delta):
 
   check_for_player()
 
+  if wander_controller.get_time_left() == 0:
+    update_movement_state_and_restart_timer()
+
 func check_for_player():
   if player_detection_zone.can_see_player():
     state = CHASE
 
-func chase_state(delta):
-  update_sprite_direction()
+func update_movement_state_and_restart_timer():
+    pick_random_state()
+    wander_controller.start_wander_timer(rand_range(1, 3))
 
+func wander_state(delta: float):
+  check_for_player()
+
+  if wander_controller.get_time_left() == 0:
+    update_movement_state_and_restart_timer()
+
+  accelerate_towards_position(wander_controller.target_position, delta)
+
+  if global_position.distance_to(wander_controller.target_position) <= wander_target_range_limit:
+    update_movement_state_and_restart_timer()
+
+func chase_state(delta: float):
   if player_detection_zone.can_see_player():
     chase_player(delta)
   else:
     state = IDLE
 
-func chase_player(delta):
+func chase_player(delta: float):
   var player = player_detection_zone.player
-  var player_direction = (player.global_position - global_position).normalized()
 
-  velocity = velocity.move_toward(player_direction * max_speed, acceleration * delta)
+  accelerate_towards_position(player.global_position, delta)
+
+func accelerate_towards_position(target_global_position: Vector2, delta: float):
+  var target_direction = global_position.direction_to(target_global_position)
+
+  velocity = velocity.move_toward(target_direction * max_speed, acceleration * delta)
 
 func create_death_effect():
   var enemy_death_effect = EnemyDeathEffect.instance()
 
   get_parent().add_child(enemy_death_effect)
   enemy_death_effect.global_position = global_position
+
+func pick_random_state():
+  var state_list = [IDLE, WANDER]
+  state_list.shuffle()
+
+  state = state_list.pop_front()
 
 # Signals
 
