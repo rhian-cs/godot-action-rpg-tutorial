@@ -6,6 +6,7 @@ signal invincibility_started
 signal invincibility_ended
 
 onready var invincibility_timer = $InvincibilityTimer
+onready var collision_shape = $CollisionShape2D
 
 var invincible: bool = false setget set_invincible
 
@@ -34,7 +35,7 @@ func _on_InvincibilityTimer_timeout():
 
 # Resetting Hurtbox
 func _on_Hurtbox_invincibility_started():
-  set_deferred("monitoring", false)
+  collision_shape.set_deferred("disabled", true)
 
 func _on_Hurtbox_invincibility_ended():
-  monitoring = true
+  collision_shape.disabled = false

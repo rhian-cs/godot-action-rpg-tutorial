@@ -33,7 +33,7 @@ var stats = PlayerStats
 
 func _ready():
   randomize()
-  stats.connect("no_health", self, "queue_free")
+  stats.connect("no_health", self, "queue_free") # warning-ignore:return_value_discarded
   update_sword_hitbox()
 
 func update_sword_hitbox():
