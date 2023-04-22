@@ -1,7 +1,5 @@
 extends AnimatedSprite
 
-onready var animated_sprite = $AnimatedSprite
-
 func _ready():
   connect("animation_finished", self, "_on_animation_finished")
   play("Animate")
@@ -9,4 +7,3 @@ func _ready():
 
 func _on_animation_finished():
   queue_free()
-

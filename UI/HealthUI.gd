@@ -26,8 +26,8 @@ func _ready():
   self.max_hearts = PlayerStats.max_health
   self.hearts = PlayerStats.health
 
-  PlayerStats.connect("health_changed", self, "set_hearts")
-  PlayerStats.connect("max_health_changed", self, "set_max_hearts")
+  PlayerStats.connect("health_changed", self, "set_hearts") # warning-ignore:return_value_discarded
+  PlayerStats.connect("max_health_changed", self, "set_max_hearts") # warning-ignore:return_value_discarded
 
 func update_hearts_ui_full():
   heart_ui_full.rect_size.x = hearts * HEART_WIDTH
